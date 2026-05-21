@@ -50,6 +50,7 @@ export interface GeocodingResult {
   country: string;
   admin1?: string;
   country_code?: string;
+  current_temp_c?: number | null;
 }
 
 export interface AIInsights {

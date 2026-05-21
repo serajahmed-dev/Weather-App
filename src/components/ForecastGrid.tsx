@@ -163,7 +163,7 @@ export const ForecastGrid: React.FC<ForecastGridProps> = ({ weatherData }) => {
         </div>
 
         {/* Scrollable Hourly Container */}
-        <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent -mx-2 px-2 snap-x">
+        <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent -mx-2 px-2 snap-x touch-pan-x">
           {next24Hours.time.map((timeStr, idx) => {
             const date = new Date(timeStr);
             const hour = date.getHours();
@@ -173,9 +173,9 @@ export const ForecastGrid: React.FC<ForecastGridProps> = ({ weatherData }) => {
             return (
               <div
                 key={timeStr}
-                className={`flex-shrink-0 w-20 flex flex-col items-center py-4 rounded-2xl snap-align-start transition-all border ${
+                className={`flex-shrink-0 w-20 flex flex-col items-center py-4 rounded-2xl snap-align-start border transform-gpu transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg active:scale-95 ${
                   isCurrentHour
-                    ? "bg-white/15 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.1)] ring-1 ring-white/15"
+                    ? "bg-white/15 border-white/40 shadow-[0_0_15px_rgba(255,255,255,0.15)] ring-1 ring-white/15"
                     : "bg-white/5 border-white/5 hover:bg-white/10"
                 }`}
               >
@@ -328,7 +328,7 @@ export const ForecastGrid: React.FC<ForecastGridProps> = ({ weatherData }) => {
         </div>
 
         {/* SIDE-BY-SIDE HORIZONTALLY SCROLLING GRID */}
-        <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent -mx-2 px-2 snap-x">
+        <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent -mx-2 px-2 snap-x touch-pan-x">
           {daily.time.map((timeStr, idx) => {
             const max = Math.round(daily.temperature_2m_max[idx]);
             const min = Math.round(daily.temperature_2m_min[idx]);
@@ -339,12 +339,11 @@ export const ForecastGrid: React.FC<ForecastGridProps> = ({ weatherData }) => {
             const isToday = dayLabel === "Today";
 
             return (
-              <motion.div
+              <div
                 key={timeStr}
-                whileHover={{ y: -4 }}
-                className={`flex-shrink-0 w-44 md:w-48 snap-align-start flex flex-col justify-between p-4 rounded-2xl border transition-all ${
+                className={`flex-shrink-0 w-44 md:w-48 snap-align-start flex flex-col justify-between p-4 rounded-2xl border transform-gpu transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.015] hover:shadow-lg active:scale-95 ${
                   isToday
-                    ? "bg-white/10 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.1)] ring-1 ring-white/15 animate-none"
+                    ? "bg-white/10 border-white/20 shadow-[0_0_15px_rgba(255,255,255,0.15)] ring-1 ring-white/15 animate-none"
                     : "bg-white/5 border-white/5 hover:bg-white/10 hover:border-white/15"
                 }`}
               >
@@ -403,7 +402,7 @@ export const ForecastGrid: React.FC<ForecastGridProps> = ({ weatherData }) => {
                     {max}°
                   </span>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

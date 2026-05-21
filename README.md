@@ -1,22 +1,20 @@
-Website link -https://weather-app-317109591473.asia-southeast1.run.app
-Weather Assistant — High-Fidelity Meteorological Web App
-A full-stack, visually rich weather intelligence cockpit featuring server-side Gemini AI integrations, high-fidelity local programmatic fallbacks, interactive Q&A history, real-time geocoding deduplication, and a premium fluid modern layout.
-🌟 Core Features
-Multi-Model Atmospheric AI Insights & Custom Q&A Thread/n
-Custom AI Q&A Form: Allows users to input highly specific questions (e.g., "Should I wear a jacket?" or "Is it safe to run outdoors today?").
-Chronological History Thread: Submitted questions instantly clear the input bar and render in a reverse-chronological interactive thread. Each issue displays a loading state during server generation.
-High-Fidelity Programmatic Fallbacks: Built-in rules dynamically answer a wide variety of questions about clothing (wear), outdoor exercise (run), rain protection (umbrella), UV protection (sunscreen), winds, and temperatures if the AI service hits quota limits.
-30-Minute Cache Routing: Employs backend caching on geographical reports and identical queries to optimize response times and protect against API rate limits.
-Precision Meteorological Metrics ("Details" Dashboard)
-Displays granular, live physical observations sourced from open geospatial APIs:
-Precipitation (in millimeters expected today).
-Wind Velocity & Direction (dynamic numeric-to-cardinal WSW string conversion).
-Relative Humidity (rendered as clean atmospheric percentages).
-Visibility Range (in kilometers, measuring surface clarity).
-Ultraviolet Peaks (maximum UV Index).
-Barometric Pressure (precisely calculated and displayed in inches of mercury (inHg)).
-High-Fidelity Chronological Forecast Charts
-24H Forecast Grid: An interactive, hourly scrolling card layout highlighting thermal movements, moisture levels, and precipitation coefficients.
-Horizontal 7-Day Extended Outlook: Replaced the long vertical list with side-by-side, responsive daily forecast grids that feature minimal/maximal temperature bars, dynamic gradient tracks, and live condition badges.
-Intelligent Geocoding Deduplication
-Implements proximity-based cleaning. When retrieving autocomplete regions from the search interface, queries are vetted within a 0.2° coordinate range (~22km) to filter out duplicate names representing the exact same city and deliver high-fidelity target listings.
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
+
+# Run and deploy your AI Studio app
+
+This contains everything you need to run your app locally.
+
+View your app in AI Studio: https://ai.studio/apps/b150359d-52dd-456d-91f5-b0f25d42a812
+
+## Run Locally
+
+**Prerequisites:**  Node.js
+
+
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`

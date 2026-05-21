@@ -84,10 +84,69 @@ app.get("/api/weather/search", async (req, res) => {
     }
 
     // Limit final high-fidelity results to 5
-    res.json(uniqueResults.slice(0, 5));
+    const topResults = uniqueResults.slice(0, 5);
+
+    // Fetch current temperature for each of the top results in parallel
+    const enrichedResults = await Promise.all(
+      topResults.map(async (item: any) => {
+        try {
+          const tempUrl = `https://api.open-meteo.com/v1/forecast?latitude=${item.latitude}&longitude=${item.longitude}&current=temperature_2m`;
+          const tempResponse = await fetch(tempUrl);
+          if (tempResponse.ok) {
+            const tempVal = await tempResponse.json();
+            return {
+              ...item,
+              current_temp_c: tempVal.current?.temperature_2m ?? null,
+            };
+          }
+        } catch (e) {
+          console.error(`Failed to fetch current temp for ${item.name}:`, e);
+        }
+        return {
+          ...item,
+          current_temp_c: null,
+        };
+      })
+    );
+
+    res.json(enrichedResults);
   } catch (error: any) {
     console.error("Geocoding error:", error);
     res.status(500).json({ error: error.message || "Failed to search location." });
+  }
+});
+
+// Reverse Geocoding API: Coordinates -> City Name or Weather Provider Fallback
+app.get("/api/weather/reverse-geocode", async (req, res) => {
+  try {
+    const { lat, lon } = req.query;
+    if (!lat || !lon) {
+      return res.status(400).json({ error: "Latitude (lat) and Longitude (lon) are required." });
+    }
+
+    const reverseUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`;
+    const response = await fetch(reverseUrl);
+    if (!response.ok) {
+      throw new Error(`Reverse geocoding failed with status ${response.status}`);
+    }
+    const data = await response.json();
+    
+    const city = data.city || data.locality || data.principalSubdivision || "";
+    const country = data.countryCode ? data.countryCode.toUpperCase() : (data.countryName || "");
+    
+    let displayName = "";
+    if (city && country) {
+      displayName = `${city}, ${country}`;
+    } else if (city || country) {
+      displayName = city || country;
+    } else {
+      displayName = "Open-Meteo Weather Grid";
+    }
+
+    res.json({ name: displayName });
+  } catch (error: any) {
+    console.error("Reverse geocoding error:", error);
+    res.json({ name: "Open-Meteo Weather Grid" });
   }
 });
 

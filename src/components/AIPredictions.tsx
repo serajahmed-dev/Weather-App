@@ -156,16 +156,6 @@ export const AIPredictions: React.FC<AIPredictionsProps> = ({
             animate={{ opacity: 1 }}
             className="space-y-5"
           >
-            {/* Fallback Warning */}
-            {insights.isFallback && (
-              <div className="flex items-start gap-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 p-3 text-xs text-amber-300">
-                <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>
-                  Using off-grid atmospheric models. To enable advanced Gemini reports, configure your **GEMINI_API_KEY** in **Settings &gt; Secrets**.
-                </span>
-              </div>
-            )}
-
             {/* Atmosphere Summary */}
             <div className="space-y-1.5">
               <div className="flex items-center gap-1.5 text-white/80 font-medium text-sm">
