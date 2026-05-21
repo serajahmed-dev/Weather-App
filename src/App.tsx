@@ -273,7 +273,7 @@ export default function App() {
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: "spring", damping: 20, stiffness: 100 }}
-          className="relative mt-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-4 shadow-2xl"
+          className="relative z-40 mt-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-4 shadow-2xl"
         >
           {/* Branded Label */}
           <div className="flex items-center gap-3 select-none">
@@ -361,7 +361,7 @@ export default function App() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
-                  className="absolute z-20 top-full right-0 left-0 mt-2 rounded-2xl bg-indigo-950/90 backdrop-blur-xl border border-white/15 p-2 shadow-2xl space-y-1"
+                  className="absolute z-50 top-full right-0 left-0 mt-2 rounded-2xl bg-indigo-950/90 backdrop-blur-xl border border-white/15 p-2 shadow-2xl space-y-1"
                 >
                   {searchResults.map((res) => (
                     <button
@@ -394,110 +394,11 @@ export default function App() {
 
             {/* Click-out blocker mask for dropdown */}
             {showDropdown && searchResults.length > 0 && (
-              <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
+              <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
             )}
           </div>
         </motion.header>
 
-        {/* FLOATING WINDOW (REFINED FIXED TRANSITION AND TEXT DESIGN ACCENTS) */}
-        <AnimatePresence>
-          {isScrolled && (
-            <motion.div
-              initial={{ y: -80, x: "-50%", opacity: 0 }}
-              animate={{ y: 0, x: "-50%", opacity: 1 }}
-              exit={{ y: -80, x: "-50%", opacity: 0 }}
-              transition={{ type: "spring", stiffness: 200, damping: 28 }}
-              className="fixed top-0 left-1/2 z-50 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:w-[calc(100%-4rem)] max-w-7xl flex items-center justify-between gap-3 p-3 rounded-b-2xl rounded-t-none bg-slate-950/95 backdrop-blur-xl border border-cyan-500/20 border-t-0 shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
-            >
-              {/* Left Side: Weather Info & Tiny Branded Identifier */}
-              <div className="flex items-center gap-2.5 overflow-hidden select-none">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-500/20 border border-cyan-400/30 text-cyan-200 shadow-inner">
-                  {weatherData ? (
-                    getWeatherIcon(weatherData.current.weather_code, weatherData.current.is_day === 1)
-                  ) : (
-                    <Compass className="h-5 w-5 animate-spin-slow text-indigo-100" />
-                  )}
-                </div>
-                <div className="flex items-center gap-2 overflow-hidden py-1">
-                  {/* Lowered city label text size to draw highlight to temperature */}
-                  <h2 className="font-sans font-bold text-xs sm:text-sm text-white/80 tracking-tight leading-none truncate max-w-[90px] sm:max-w-[140px] md:max-w-xs">
-                    {locationName}
-                  </h2>
-                  {weatherData && (
-                    <span className="font-sans font-extrabold text-xs sm:text-base text-cyan-300 tracking-tight leading-none shrink-0 border-l border-white/20 pl-2">
-                      {formatTemp(weatherData.current.temperature_2m)}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Right Side: Shared Search Field Inside Floating Window */}
-              <div className="relative w-[45%] max-w-[280px]">
-                <div className="flex items-center bg-white/5 rounded-xl border border-white/10 focus-within:border-cyan-500/40 p-1 transition-all">
-                  <div className="pl-2 text-white/50">
-                    <Search className="h-3.5 w-3.5" />
-                  </div>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onFocus={() => setShowDropdown(true)}
-                    onChange={handleQueryChange}
-                    placeholder="Search city..."
-                    className="w-full text-xs text-white placeholder-white/40 bg-transparent py-1.5 px-2.5 focus:outline-none"
-                  />
-                  {isSearching && (
-                    <div className="pr-3 text-white/50">
-                      <RotateCw className="h-3.5 w-3.5 animate-spin" />
-                    </div>
-                  )}
-                </div>
-
-                {/* Dropdown for Floating Window Input */}
-                <AnimatePresence>
-                  {showDropdown && searchResults.length > 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      className="absolute z-60 top-full right-0 left-0 mt-2 rounded-2xl bg-indigo-950/95 backdrop-blur-xl border border-cyan-500/20 p-2 shadow-2xl space-y-1 max-h-60 overflow-y-auto"
-                    >
-                      {searchResults.map((res) => (
-                        <button
-                          key={res.id}
-                          onClick={() => handleSelectLocation(res)}
-                          className="w-full text-left flex items-center justify-between p-2 rounded-xl h-11 hover:bg-white/10 transition-all group"
-                        >
-                          <div className="min-w-0 pr-2">
-                            <p className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors truncate">
-                              {res.name}
-                            </p>
-                            <p className="text-[10px] text-white/50 truncate">
-                              {res.admin1 ? `${res.admin1}, ` : ""}{res.country}
-                            </p>
-                          </div>
-                          {res.current_temp_c != null ? (
-                            <span className="text-xs font-sans font-semibold rounded bg-white/10 px-2 py-1 border border-white/15 text-cyan-200">
-                              {formatTemp(res.current_temp_c)}
-                            </span>
-                          ) : (
-                            <span className="text-xs font-sans text-white/40">
-                              --
-                            </span>
-                          )}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Dropdown Dismiss Backdrop */}
-                {showDropdown && searchResults.length > 0 && (
-                  <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* ERROR SUMMARY */}
         {error && (
@@ -700,6 +601,106 @@ export default function App() {
         )}
 
       </div>
+
+      {/* FLOATING WINDOW (REFINED FIXED TRANSITION AND TEXT DESIGN ACCENTS) */}
+      <AnimatePresence>
+        {isScrolled && (
+          <motion.div
+            initial={{ y: -80, x: "-50%", opacity: 0 }}
+            animate={{ y: 0, x: "-50%", opacity: 1 }}
+            exit={{ y: -80, x: "-50%", opacity: 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 28 }}
+            className="fixed top-0 left-1/2 z-[100] w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] md:w-[calc(100%-4rem)] max-w-7xl flex items-center justify-between gap-3 p-3 rounded-b-2xl rounded-t-none bg-slate-950/95 backdrop-blur-xl border border-cyan-500/20 border-t-0 shadow-[0_15px_30px_rgba(0,0,0,0.5)]"
+          >
+            {/* Left Side: Weather Info & Tiny Branded Identifier */}
+            <div className="flex items-center gap-2.5 overflow-hidden select-none">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-cyan-500/20 border border-cyan-400/30 text-cyan-200 shadow-inner">
+                {weatherData ? (
+                  getWeatherIcon(weatherData.current.weather_code, weatherData.current.is_day === 1)
+                ) : (
+                  <Compass className="h-5 w-5 animate-spin-slow text-indigo-100" />
+                )}
+              </div>
+              <div className="flex items-center gap-2 overflow-hidden py-1">
+                {/* Lowered city label text size to draw highlight to temperature */}
+                <h2 className="font-sans font-bold text-xs sm:text-sm text-white/80 tracking-tight leading-none truncate max-w-[90px] sm:max-w-[140px] md:max-w-xs">
+                  {locationName}
+                </h2>
+                {weatherData && (
+                  <span className="font-sans font-extrabold text-xs sm:text-base text-cyan-300 tracking-tight leading-none shrink-0 border-l border-white/20 pl-2">
+                    {formatTemp(weatherData.current.temperature_2m)}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Right Side: Shared Search Field Inside Floating Window */}
+            <div className="relative w-[45%] max-w-[280px]">
+              <div className="flex items-center bg-white/5 rounded-xl border border-white/10 focus-within:border-cyan-500/40 p-1 transition-all">
+                <div className="pl-2 text-white/50">
+                  <Search className="h-3.5 w-3.5" />
+                </div>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onFocus={() => setShowDropdown(true)}
+                  onChange={handleQueryChange}
+                  placeholder="Search city..."
+                  className="w-full text-xs text-white placeholder-white/40 bg-transparent py-1.5 px-2.5 focus:outline-none"
+                />
+                {isSearching && (
+                  <div className="pr-3 text-white/50">
+                    <RotateCw className="h-3.5 w-3.5 animate-spin" />
+                  </div>
+                )}
+              </div>
+
+              {/* Dropdown for Floating Window Input */}
+              <AnimatePresence>
+                {showDropdown && searchResults.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    className="absolute z-[110] top-full right-0 left-0 mt-2 rounded-2xl bg-indigo-950/95 backdrop-blur-xl border border-cyan-500/20 p-2 shadow-2xl space-y-1 max-h-60 overflow-y-auto"
+                  >
+                    {searchResults.map((res) => (
+                      <button
+                        key={res.id}
+                        onClick={() => handleSelectLocation(res)}
+                        className="w-full text-left flex items-center justify-between p-2 rounded-xl h-11 hover:bg-white/10 transition-all group"
+                      >
+                        <div className="min-w-0 pr-2">
+                          <p className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors truncate">
+                            {res.name}
+                          </p>
+                          <p className="text-[10px] text-white/50 truncate">
+                            {res.admin1 ? `${res.admin1}, ` : ""}{res.country}
+                          </p>
+                        </div>
+                        {res.current_temp_c != null ? (
+                          <span className="text-xs font-sans font-semibold rounded bg-white/10 px-2 py-1 border border-white/15 text-cyan-200">
+                            {formatTemp(res.current_temp_c)}
+                          </span>
+                        ) : (
+                          <span className="text-xs font-sans text-white/40">
+                            --
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Dropdown Dismiss Backdrop */}
+              {showDropdown && searchResults.length > 0 && (
+                <div className="fixed inset-0 z-[105]" onClick={() => setShowDropdown(false)} />
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* FOOTER METADATA CONTROLS */}
       <footer className="w-full max-w-7xl mx-auto px-4 md:px-6 lg:px-8 mt-12 border-t border-white/10 pt-6 text-center shrink-0">
