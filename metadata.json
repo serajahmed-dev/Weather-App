@@ -1,0 +1,6 @@
+{
+  "name": "Weather App",
+  "description": "A elegant real-time weather application that automatically synchronizes your location, provides detailed weather forecasts, AI insights, and interactive animations for wind, rain, sun, and cold weather conditions.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
